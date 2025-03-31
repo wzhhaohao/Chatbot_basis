@@ -237,7 +237,7 @@ def save_conversation():
         stream=False,
     )
 
-    messages.append({"role": "user", "content": "严格用10个token以内的标题总结以上全部对话内容"})
+    messages.append({"role": "user", "content": "严格用15个字以内的标题总结以上全部对话内容"})
 
     # 获取标题并清理非法字符
     title = response.choices[0].message.content.strip()
