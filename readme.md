@@ -1,8 +1,8 @@
-# Chimera Chatbot 001 - 功能介绍
+# 功能介绍
 
 ## 项目概述
 
-Chimera Chatbot 001 是一个大模型api调用的简短代码，实际上没什么卵用，因为有很多开源的项目已经做过了，例如CherryStudio等等。
+Chatbot是一个大模型api调用的简短代码，实际上没什么卵用,这跟就是自己瞎琢磨着玩的，因为有很多开源的项目已经做过了，例如CherryStudio等等。
 
 ## 功能特点
 
