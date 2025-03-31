@@ -243,10 +243,12 @@ def chat():
         messages.append({"role": "assistant", "content": f"/n {full_reply}"})
 
         # 提示用户继续输入
-        print("请继续输入文本或文件路径，或者输入 'exit' 或 'quit' 退出聊天。")
+        print("请继续输入文本或文件路径，或者输入 'exit' 或 'quit' 或 'q' 或 ‘退出’ 或 '结束'，退出聊天。")
 
 
 def save_conversation():
+    messages.append({"role": "user", "content": "严格用15个字以内的中文标题总结以上全部对话内容"})
+
     # 请求生成标题
     response = client.chat.completions.create(
         model = model,
@@ -256,7 +258,6 @@ def save_conversation():
         stream=False,
     )
 
-    messages.append({"role": "user", "content": "严格用15个字以内的中文标题总结以上全部对话内容"})
 
     # 获取标题并清理非法字符
     title = response.choices[0].message.content.strip()
