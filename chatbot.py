@@ -221,7 +221,7 @@ def chat():
                 print(full_reply)
 
         # 将返回的内容添加到消息列表中
-        messages.append({"role": "assistant", "content": full_reply})
+        messages.append({"role": "assistant", "content": f"/n {full_reply}"})
 
         # 提示用户继续输入
         print("请继续输入文本或文件路径，或者输入 'exit' 或 'quit' 退出聊天。")
@@ -254,11 +254,12 @@ def save_conversation():
     file_path = os.path.join(history_dir, filename)
 
     del messages[0]
+    messages.pop(0)
 
     # 写入文件
     with open(file_path, "w", encoding="utf-8") as file:
         file.write(f"# {title}\n\n")
-        file.write(f"使用模型{model}\n")
+        file.write(f"## 使用模型{model}\n\n")
         for message in messages:
             file.write(f"{message['role']}: {message['content']}\n")
 
