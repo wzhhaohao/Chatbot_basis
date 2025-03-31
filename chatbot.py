@@ -31,7 +31,7 @@ if model == 0:
     model = "deepseek-chat"  # 默认模型
 elif model == 1:
     print("使用深度推理模型 deepseek-reasoner。但是在api的调用中暂时没有打开思维链，因为贵")
-    model = "deepseek-reasoner"
+    model = deepseek-reasoner
 else:
     print("无效的模型名称，使用默认模型 deepseek-chat。")
     model = "deepseek-chat"
@@ -169,7 +169,7 @@ def extract_text_from_pdf_images(file_path):
 
 def chat():
     print("欢迎Chimera的chatbot001号！")
-    print("请注意：\n1. 输入 'exit' 或 'quit' 退出聊天。\n2. 输入文件路径以读取文件内容。\n3. 输入文本进行交互。")
+    print("请注意：\n1. 输入 'exit' 或 'quit' 或 'q' 或 ‘退出’ 或 '结束' 退出聊天。\n2. 输入文件路径以读取文件内容。\n3. 输入文本进行交互。")
     
     stream = input("是否开启流式输出？（y/n）")
     if stream.lower() == 'y':
@@ -181,7 +181,7 @@ def chat():
         # 获取用户输入（也可以是一个文件路径）
         user_input = input("请输入文本（或文件路径）：")
         
-        # 如果输入 'exit' 或 'quit'，退出聊天
+        # 如果输入 'exit' 或 'quit' 或 'q' 或 ‘退出’ 或 '结束'，退出聊天
         if user_input.lower() in ['exit', 'quit', '退出', '结束', 'q']:
             print("聊天结束。")
             break
@@ -233,7 +233,7 @@ def save_conversation():
         model = model,
         messages=messages,
         temperature=0.5,
-        max_tokens=10,
+        max_tokens=20,
         stream=False,
     )
 
@@ -258,6 +258,7 @@ def save_conversation():
     # 写入文件
     with open(file_path, "w", encoding="utf-8") as file:
         file.write(f"# {title}\n\n")
+        file.write(f"使用模型{model}\n")
         for message in messages:
             file.write(f"{message['role']}: {message['content']}\n")
 
