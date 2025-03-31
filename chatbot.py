@@ -83,6 +83,8 @@ def process_user_input(user_input):
         file_content = read_file(user_input)
         print(f"文件内容：\n{file_content}")
         messages.append({"role": "user", "content": file_content})
+        user_action = input("请输入你想对文件的操作（已经导入文件）：")
+        messages.append({"role": "user", "content": user_action})
     else:
         # 用户直接输入文本
         messages.append({"role": "user", "content": user_input})
@@ -237,13 +239,15 @@ def save_conversation():
         stream=False,
     )
 
-    messages.append({"role": "user", "content": "严格用15个字以内的标题总结以上全部对话内容"})
+    messages.append({"role": "user", "content": "严格用15个字以内的中文标题总结以上全部对话内容"})
 
     # 获取标题并清理非法字符
     title = response.choices[0].message.content.strip()
     title = re.sub(r'[\\/*?:"<>|]', "", title)
     if not title:
         title = "conversation_summary"
+
+    messages.pop()
 
     # 创建 history 目录（如不存在则创建）
     history_dir = os.path.join(os.getcwd(), "history")
@@ -254,7 +258,6 @@ def save_conversation():
     file_path = os.path.join(history_dir, filename)
 
     del messages[0]
-    messages.pop(0)
 
     # 写入文件
     with open(file_path, "w", encoding="utf-8") as file:
