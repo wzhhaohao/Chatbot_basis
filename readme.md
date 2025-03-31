@@ -1,4 +1,3 @@
-```markdown
 # Chimera Chatbot 001 - 功能介绍
 
 ## 项目概述
