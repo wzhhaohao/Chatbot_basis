@@ -27,14 +27,17 @@ client = OpenAI(api_key = deepseek_api_key, base_url = deepseek_api_url)
 
 # 想使用的模型
 model = input("请输入模型名称（如：deepseek-V3:0, deepseek-r1:1）：")
-if model == 0:
+if model == "0":
     model = "deepseek-chat"  # 默认模型
-elif model == 1:
+    print(model)
+elif model == "1":
     print("使用深度推理模型 deepseek-reasoner。但是在api的调用中暂时没有打开思维链，因为贵")
-    model = deepseek-reasoner
+    model = "deepseek-reasoner"
+    print(model)
 else:
     print("无效的模型名称，使用默认模型 deepseek-chat。")
     model = "deepseek-chat"
+    print(model)
 
 # 初始化对话上下文
 messages = [
@@ -65,6 +68,7 @@ messages = [
 
         #### 输出格式
         - 所有回复请使用 **Markdown 格式**，包括标题、列表、公式、代码块、强调等。
+        - 所有数学公式请一律使用 $内容$ 或 $$内容$$ 的 LaTeX 形式书写，不允许使用 \\[ \\] 或 \\( \\) 包围公式，以保证在 Typora 等 Markdown 编辑器中正确显示。行内公式使用单个美元符号 $ 内容 $，块级公式使用双美元符号 $$ 内容 $$。
         """
     }
 ]
@@ -82,9 +86,8 @@ def process_user_input(user_input):
         # 读取文件内容
         file_content = read_file(user_input)
         print(f"文件内容：\n{file_content}")
-        messages.append({"role": "user", "content": file_content})
         user_action = input("请输入你想对文件的操作（已经导入文件）：")
-        messages.append({"role": "user", "content": user_action})
+        messages.append({"role": "user", "content": f'文件数据：{file_content} 操作：{user_action}'})
     else:
         # 用户直接输入文本
         messages.append({"role": "user", "content": user_input})
@@ -201,17 +204,31 @@ def chat():
     )
         print("Chimera的chatbot001号：")
         # 如果开启流式输出，打印每一段返回的内容
-        if stream:
-            # 初始化一个变量来保存完整的生成内容
-            full_reply = ""
+        # if stream:
+        #     # 初始化一个变量来保存完整的生成内容
+        #     full_reply = ""
 
+        #     for chunk in response:
+        #         # print(chunk)
+        #         chunk_content = ""
+        #         if chunk.choices:
+        #             chunk_content = chunk.choices[0].delta.content
+        #             print(chunk_content, end='', flush=True)  # 打印当前块的内容
+        #             full_reply += chunk_content
+
+        if stream:
+            full_reply = ""
             for chunk in response:
-                # print(chunk)
-                chunk_content = ""
                 if chunk.choices:
+                    # 获取当前块的内容
                     chunk_content = chunk.choices[0].delta.content
-                    print(chunk_content, end='', flush=True)  # 打印当前块的内容
-                    full_reply += chunk_content
+            
+                # 如果 chunk_content 是 None，赋值为空字符串
+                if chunk_content is None:
+                    chunk_content = ""
+                
+                full_reply += chunk_content
+                print(chunk_content, end='', flush=True)  # 打印当前块的内容
             print()  # 打印换行符
                     
         else:       
