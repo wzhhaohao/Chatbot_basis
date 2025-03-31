@@ -25,6 +25,17 @@ deepseek_api_url = os.getenv("DeepSeek_API_URL")
 # 检查 API 密钥和 URL 是否存在
 client = OpenAI(api_key = deepseek_api_key, base_url = deepseek_api_url)
 
+# 想使用的模型
+model = input("请输入模型名称（如：deepseek-V3:0, deepseek-r1:1）：")
+if model == 0:
+    model = "deepseek-chat"  # 默认模型
+elif model == 1:
+    print("使用深度推理模型 deepseek-reasoner。但是在api的调用中暂时没有打开思维链，因为贵")
+    model = "deepseek-reasoner"
+else:
+    print("无效的模型名称，使用默认模型 deepseek-chat。")
+    model = "deepseek-chat"
+
 # 初始化对话上下文
 messages = [
     {
@@ -180,10 +191,10 @@ def chat():
 
         # 准备请求数据
         response = client.chat.completions.create(
-        model = "deepseek-chat",
+        model = model,
         messages = messages,
-        temperature=0.6,  # 控制生成文本的多样性,腾讯云的API建议是0.6，一般在0.5-0.7之间
-        max_tokens=10,  # 限制生成的文本最大长度 这里是测试版本，自己用可以调高 3000
+        temperature = 0.6,  # 控制生成文本的多样性,腾讯云的API建议是0.6，一般在0.5-0.7之间
+        max_tokens = 4000,  # 限制生成的文本最大长度 这里是测试版本，自己用可以调高 3000
         stream = stream,  # 是否开启流式输出
     )
         print("Chimera的chatbot001号：")
@@ -219,14 +230,14 @@ def chat():
 def save_conversation():
     # 请求生成标题
     response = client.chat.completions.create(
-        model="deepseek-chat",
+        model = model,
         messages=messages,
         temperature=0.5,
         max_tokens=10,
         stream=False,
     )
 
-    messages.append({"role": "user", "content": "用10个token以内的标题总结对话内容"})
+    messages.append({"role": "user", "content": "严格用10个token以内的标题总结以上全部对话内容"})
 
     # 获取标题并清理非法字符
     title = response.choices[0].message.content.strip()
