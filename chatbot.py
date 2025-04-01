@@ -26,12 +26,12 @@ deepseek_api_url = os.getenv("DeepSeek_API_URL")
 client = OpenAI(api_key = deepseek_api_key, base_url = deepseek_api_url)
 
 # 想使用的模型
-model = input("请输入模型名称（如：deepseek-V3:0, deepseek-r1:1）：")
+model = input("请输入模型名称(如:deepseek-V3:0, deepseek-r1:1):")
 if model == "0":
     model = "deepseek-chat"  # 默认模型
     print(model)
 elif model == "1":
-    print("使用深度推理模型 deepseek-reasoner。但是在api的调用中暂时没有打开思维链，因为贵")
+    print("使用深度推理模型 deepseek-reasoner。但是在api的调用中暂时没有打开思维链,因为贵")
     model = "deepseek-reasoner"
     print(model)
 else:
@@ -157,7 +157,7 @@ def extract_text_from_pdf(file_path):
 
 
 def extract_text_from_pdf_images(file_path):
-    """从 PDF 页面中的图像提取文本（OCR）"""
+    """从 PDF 页面中的图像提取文本(OCR)"""
     text = ""
     # 使用 pdf2image 将每个页面转换为图像
     pages = convert_from_path(file_path, 300)  # 300 dpi 是较高质量的转换
@@ -173,10 +173,10 @@ def extract_text_from_pdf_images(file_path):
 
 
 def chat():
-    print("欢迎Chimera的chatbot001号！")
+    print("欢迎Chimera的chatbot001号!")
     print("请注意：\n1. 输入 'exit' 或 'quit' 或 'q' 或 ‘退出’ 或 '结束' 退出聊天。\n2. 输入文件路径以读取文件内容。\n3. 输入文本进行交互。")
     
-    stream = input("是否开启流式输出？（y/n）")
+    stream = input("是否开启流式输出?(y/n)")
     if stream.lower() == 'y':
         stream = True
     else:
@@ -202,20 +202,8 @@ def chat():
         max_tokens = 4000,  # 限制生成的文本最大长度 这里是测试版本，自己用可以调高 3000
         stream = stream,  # 是否开启流式输出
     )
-        print("Chimera的chatbot001号：")
+        print("Chimera的chatbot001号:")
         # 如果开启流式输出，打印每一段返回的内容
-        # if stream:
-        #     # 初始化一个变量来保存完整的生成内容
-        #     full_reply = ""
-
-        #     for chunk in response:
-        #         # print(chunk)
-        #         chunk_content = ""
-        #         if chunk.choices:
-        #             chunk_content = chunk.choices[0].delta.content
-        #             print(chunk_content, end='', flush=True)  # 打印当前块的内容
-        #             full_reply += chunk_content
-
         if stream:
             full_reply = ""
             for chunk in response:
@@ -279,10 +267,12 @@ def save_conversation():
 
     # 写入文件
     with open(file_path, "w", encoding="utf-8") as file:
-        file.write(f"# {title}\n\n")
-        file.write(f"## 使用模型{model}\n\n")
+        content = [f"# {title}\n\n", f"## 使用模型{model}\n\n"]
         for message in messages:
-            file.write(f"{message['role']}: {message['content']}\n")
+            content.append(f"{message['role']}: {message['content']}\n")
+        
+            # 一次性写入所有内容
+        file.write(''.join(content))
 
     print(f"对话记录已保存为 {file_path}")
 
